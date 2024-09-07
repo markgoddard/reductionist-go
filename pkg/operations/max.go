@@ -7,36 +7,43 @@ import (
 	"golang.org/x/exp/constraints"
 )
 
-type Max struct {
-}
+type Max struct {}
 
 func (max Max) Execute(data []byte, request_data request.Data) ([]byte, error) {
 	if len(data) == 0 {
 		return nil, errors.New("No elements")
 	}
-	return dispatch(data, request_data)
+	op, err := makeMaxT(data, request_data)
+	if err != nil {
+		return nil, err
+	}
+	return op.Execute(data, request_data)
 }
 
-func dispatch(data []byte, request_data request.Data) ([]byte, error) {
+type maxT[T constraints.Ordered] struct {
+}
+
+func makeMaxT(data []byte, request_data request.Data) (Operation, error) {
+	// Dispatch to a specific type.
 	switch request_data.Dtype {
 	case "int64":
-		return doMax[int64](data, request_data)
+		return maxT[int64]{}, nil
 	case "int32":
-		return doMax[int32](data, request_data)
+		return maxT[int32]{}, nil
 	case "uint64":
-		return doMax[uint64](data, request_data)
+		return maxT[uint64]{}, nil
 	case "uint32":
-		return doMax[uint64](data, request_data)
+		return maxT[uint64]{}, nil
 	case "float64":
-		return doMax[float64](data, request_data)
+		return maxT[float64]{}, nil
 	case "float32":
-		return doMax[float32](data, request_data)
+		return maxT[float32]{}, nil
 	default:
 		return nil, errors.New("Unexpected dtype")
 	}
 }
 
-func doMax[T constraints.Ordered](data []byte, request_data request.Data) ([]byte, error) {
+func (max maxT[T]) Execute(data []byte, request_data request.Data) ([]byte, error) {
 	buf, err := bytesToTs[T](data)
 	if err != nil {
 		return nil, err
