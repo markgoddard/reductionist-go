@@ -13,6 +13,9 @@ type Operation struct {
 }
 
 func (operation Operation) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	if req.Method != "POST" {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
 	request_data, err := request.FromJson(req.Body)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
