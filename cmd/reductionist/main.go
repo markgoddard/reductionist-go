@@ -10,6 +10,7 @@ import (
 
 func main() {
 	conf := config.Parse()
+	http.Handle("/v1/max", handlers.New(operations.Max{}))
 	http.Handle("/v1/min", handlers.New(operations.Min{}))
 	http.Handle("/v1/sum", handlers.New(operations.Sum{}))
 	addr := fmt.Sprintf(":%d", conf.Port)
