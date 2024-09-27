@@ -61,8 +61,7 @@ func (p *Pool) worker(id uint) {
 }
 
 func NewJob(operation operations.Operation, data []byte, request_data request.Data) Job {
-	// Wait hangs if result is unbuffered. Why?
-	return Job{result: make(chan result, 1), operation: operation, data: data, request_data: request_data}
+	return Job{result: make(chan result), operation: operation, data: data, request_data: request_data}
 }
 
 func (j *Job) Wait() ([]byte, error) {
