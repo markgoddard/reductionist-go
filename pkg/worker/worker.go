@@ -27,7 +27,7 @@ type result struct {
 }
 
 func NewPool(workers uint) *Pool {
-	pool := Pool{queue: make(chan *Job, workers)}
+	pool := Pool{queue: make(chan *Job)}
 	for id := range workers {
 		go pool.worker(id)
 	}
