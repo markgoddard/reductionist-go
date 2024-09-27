@@ -11,10 +11,10 @@ type Min struct {
 
 func (min Min) Execute(data []byte, request_data request.Data) (result []byte, err error) {
 	if request_data.Dtype != "int64" {
-		return nil, errors.New("Unexpected dtype")
+		return nil, errors.New("unexpected dtype")
 	}
 	if len(data) == 0 {
-		return nil, errors.New("No elements")
+		return nil, errors.New("no elements")
 	}
 	buf, err := bytesToInt64s(data)
 	if err != nil {

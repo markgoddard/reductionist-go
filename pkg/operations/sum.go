@@ -3,6 +3,7 @@ package operations
 import (
 	"errors"
 	"fmt"
+
 	"github.com/markgoddard/reductionist/pkg/request"
 )
 
@@ -11,7 +12,7 @@ type Sum struct {
 
 func (sum Sum) Execute(data []byte, request_data request.Data) (result []byte, err error) {
 	if request_data.Dtype != "int64" {
-		return nil, errors.New("Unexpected dtype")
+		return nil, errors.New("unexpected dtype")
 	}
 	buf, err := bytesToInt64s(data)
 	if err != nil {

@@ -3,17 +3,18 @@ package operations
 import (
 	"errors"
 	"fmt"
+
 	"github.com/markgoddard/reductionist/pkg/request"
 	"golang.org/x/exp/constraints"
 )
 
-type Max struct {}
+type Max struct{}
 
 func (max Max) Execute(data []byte, request_data request.Data) ([]byte, error) {
 	if len(data) == 0 {
-		return nil, errors.New("No elements")
+		return nil, errors.New("no elements")
 	}
-	op, err := makeMaxT(data, request_data)
+	op, err := makeMaxT(request_data)
 	if err != nil {
 		return nil, err
 	}
@@ -23,7 +24,7 @@ func (max Max) Execute(data []byte, request_data request.Data) ([]byte, error) {
 type maxT[T constraints.Ordered] struct {
 }
 
-func makeMaxT(data []byte, request_data request.Data) (Operation, error) {
+func makeMaxT(request_data request.Data) (Operation, error) {
 	// Dispatch to a specific type.
 	switch request_data.Dtype {
 	case "int64":
@@ -39,7 +40,7 @@ func makeMaxT(data []byte, request_data request.Data) (Operation, error) {
 	case "float32":
 		return maxT[float32]{}, nil
 	default:
-		return nil, errors.New("Unexpected dtype")
+		return nil, errors.New("unexpected dtype")
 	}
 }
 
